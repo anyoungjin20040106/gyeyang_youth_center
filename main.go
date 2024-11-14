@@ -18,10 +18,6 @@ import (
 	_ "github.com/mattn/go-sqlite3" // SQLite 드라이버 임포트
 )
 
-type PageData struct {
-	Table template.HTML
-}
-
 func generateSecretHex(length int) string {
 	bytes := make([]byte, length)
 	_, err := rand.Read(bytes)
@@ -34,7 +30,7 @@ func generateSecretHex(length int) string {
 func main() {
 	// Gin 라우터 생성
 	r := gin.Default()
-
+	r.Static("/asset", "./asset")
 	// SQLite 데이터베이스 연결
 	db, err := sql.Open("sqlite3", "./main.db")
 	if err != nil {
@@ -268,5 +264,5 @@ func main() {
 		ctx.Redirect(303, "/")
 	})
 
-	r.Run(":4321")
+	r.Run(":1234")
 }
