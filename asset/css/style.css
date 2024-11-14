@@ -144,10 +144,9 @@ form input[type="file"] {
 }
 
 /* 사용자 정의 파일 선택 버튼 */
-form .file-upload-label {
+label {
     display: inline-block;
-    background-color: #9d4edd;
-    color: #e0e0e0;
+    color: #9d4edd;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
