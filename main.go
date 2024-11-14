@@ -68,6 +68,7 @@ func main() {
 				// 세션에서 메시지 정보를 삭제하여 한 번만 표시
 				session.Delete("msg")
 				session.Delete("color")
+				session.Delete("failMsg")
 				session.Save()
 			}
 
