@@ -235,7 +235,7 @@ func main() {
 			ctx.Redirect(http.StatusSeeOther, "/teacher")
 			return
 		}
-
+		file.Filename = strings.Replace(file.Filename, " ", "", -1)
 		// 파일 저장 경로 및 파일 저장
 		filePath := filepath.Join("./ppt", file.Filename)
 		if err := ctx.SaveUploadedFile(file, filePath); err != nil {
