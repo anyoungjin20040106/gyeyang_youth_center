@@ -77,7 +77,7 @@ func main() {
 		session := sessions.Default(ctx)
 		pw := ctx.PostForm("pw")
 		// 비밀번호 검증 및 세션 설정
-		if pw == /*os.Getenv(*/ "Ttest" /*)*/ {
+		if pw == os.Getenv("Ttest") {
 			session.Set("user", "T")
 			session.Save()
 			ctx.Redirect(http.StatusSeeOther, "/ppt")
