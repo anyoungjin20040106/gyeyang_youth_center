@@ -114,7 +114,7 @@ func main() {
 				return
 			}
 			defer rows.Close()
-			table := "<tr><th>제목</th><th>업로드 날짜</th><th>업로드 시간</th><th>다운로드</th>"
+			table := "<tr><th>제목</th><th>업로드 날짜</th><th>다운로드</th>"
 			if user == "T" {
 				table += "<th>삭제하기</th>"
 			}
@@ -124,8 +124,8 @@ func main() {
 				var upload string
 				var fname string
 				rows.Scan(&title, &upload, &fname)
-				tdata := strings.Split(strings.Replace(strings.Replace(upload, "Z", "", 1), "T", " ", 1), " ")
-				table += fmt.Sprintf("<tr><td>%s</td><td>%s</td><td>%s</td><td><a href='download?fname=%s'>다운로드</a></td>", title, tdata[0], tdata[1], fname)
+				tdata := strings.Split(upload, "T")[0]
+				table += fmt.Sprintf("<tr><td>%s</td><td>%s</td><td><a href='download?fname=%s'>다운로드</a></td>", title, tdata, fname)
 				if user == "T" {
 					table += fmt.Sprintf("<td><a href='delete?fname=%s'>삭제하기</a></td>", fname)
 				}
