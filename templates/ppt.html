@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPT자료
+        {{ if eq .user "T" }}
+        (선생용)
+        {{ else if eq .user "S" }}
+        (학생용)
+        {{ end }}
+    </title>
+</head>
+
+<body>
+
+    <table border="1">
+        {{if .table}}
+        {{.table}}
+        {{end}}
+    </table><br>
+    <button type="button" onclick="window.location.href='/logout'">로그아웃</button>
+    {{ if eq .user "T" }}
+    <button onclick="window.location.href='/teacher'">게시물 작성하기</button>
+    {{ end }}
+</body>
+
+</html>

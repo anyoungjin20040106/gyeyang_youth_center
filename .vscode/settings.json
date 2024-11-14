@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Gyeyang_youth_center",
+            "database": "${workspaceFolder:gyeyang_youth_center}/main.db"
+        }
+    ]
+}

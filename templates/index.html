@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계양구 청소년 수련과 컴퓨터 강의</title>
+</head>
+<body>
+    <h2>로그인</h2>
+    <form action="/login" method="post">
+        <!-- 에러 메시지 출력 -->
+        {{ if .msg }}
+            <p style="color: {{ .color }};">{{ .msg }}</p>
+        {{ end }}
+        <label for="pw">비밀번호:</label><br>
+        <input id="pw" name="pw" type="password" required><br><br>
+        <button type="submit">들어가기</button>
+    </form>
+</body>
+</html>
