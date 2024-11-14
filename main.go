@@ -140,6 +140,28 @@ func main() {
 			ctx.Redirect(http.StatusSeeOther, "/")
 		}
 	})
+	r.Any("/getDB", func(ctx *gin.Context) {
+		session := sessions.Default(ctx)
+		user := session.Get("user")
+
+		// 사용자 로그인 여부 확인
+		if user == "T" {
+			ctx.FileAttachment("main.db", "main.db")
+			files, _ := db.Query("select fname from PPT")
+			for files.Next() {
+				var file string
+				files.Scan(&file)
+				ctx.FileAttachment(filepath.Join("ppt", file), file)
+			}
+			ctx.Redirect(http.StatusSeeOther, "/ppt")
+		} else {
+			session.Set("msg", "선생님만 들어갈수 있습니다.")
+			session.Set("color", "red")
+			session.Save()
+			ctx.Redirect(http.StatusSeeOther, "/")
+		}
+
+	})
 	r.Any("/download", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
 		user := session.Get("user")
