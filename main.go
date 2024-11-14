@@ -76,9 +76,8 @@ func main() {
 	r.POST("/login", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
 		pw := ctx.PostForm("pw")
-
 		// 비밀번호 검증 및 세션 설정
-		if pw == os.Getenv("Ttest") {
+		if pw == /*os.Getenv(*/ "Ttest" /*)*/ {
 			session.Set("user", "T")
 			session.Save()
 			ctx.Redirect(http.StatusSeeOther, "/ppt")
@@ -178,13 +177,17 @@ func main() {
 	r.Any("/delete", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
 		user := session.Get("user")
+		fmt.Println(user)
 		// 사용자 로그인 여부 확인
 		if user == "T" || user == "S" {
 			fname := ctx.Query("fname")
-			os.Remove(filepath.Join("ppt", fname))
+
+			if err := os.Remove(filepath.Join("ppt", fname)); err != nil {
+				fmt.Println("삭제 에러")
+			}
 			_, err := db.Exec("delete from ppt where fname=?", fname)
 			if err != nil {
-				fmt.Print("에러가 생겼다")
+				fmt.Println("에러가 생겼다")
 			}
 			ctx.Redirect(http.StatusSeeOther, "/ppt")
 		} else {
