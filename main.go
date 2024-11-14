@@ -99,6 +99,7 @@ func main() {
 	r.Any("/ppt", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
 		user := session.Get("user")
+		session.Delete("failMsg")
 		// 사용자 로그인 여부 확인
 		if user == "T" || user == "S" {
 			rows, err := db.Query("SELECT * FROM PPT")

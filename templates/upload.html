@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/asset/css/style.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>업로드</title>
     <link rel="icon" href="/asset/img/icon.png" />
     <link rel="apple-touch-icon" href="/asset/img/icon.png" />
 </head>
 <body>
-    <form action="/upload" method="post"  enctype="multipart/form-data">
-        제목 : <input name="title" required><br>
-        파일 : <input name="file" type="file" required><br>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        제목 : <input name="title" type="text" required><br>
+        
+        <!-- 사용자 정의 파일 선택 버튼 -->
+        파일 : <label for="file-upload" class="file-upload-label">파일 선택</label>
+        <input id="file-upload" name="file" type="file" required><br>
+
         <button type="submit">업로드 하기</button>
-    </table>
     </form>
     <button type="button" onclick="window.location.href='/ppt'">뒤로 가기</button>
 </body>
+
 <script>
     {{if .failMsg}}
     alert("{{.failMsg}}")
