@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/asset/css/style.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PPT자료
         {{ if eq .user "T" }}
@@ -18,17 +17,44 @@
 </head>
 
 <body>
-
-    <table border="1">
-        {{if .table}}
-        {{.table}}
-        {{end}}
-    </table><br>
-    <button type="button" onclick="window.location.href='/logout'">로그아웃</button>
-    {{ if eq .user "T" }}
-    <button onclick="window.location.href='/teacher'">게시물 작성하기</button>
-    <button onclick="window.location.href='/getDB'">백업하기</button>
-    {{ end }}
+    <form class="form">
+        <table border="1">
+            <tr>
+                <th>제목</th>
+                <th>업로드 날짜</th>
+                <th>다운로드</th>
+                {{ if eq .user "T" }}
+                <th>삭제하기</th>
+                {{ end }}
+            </tr>
+            {{ range .rows }}
+            <tr>
+                <td>{{ .title }}</td>
+                <td>{{ .upload }}</td>
+                <td>
+                    <form method="post" action="/download">
+                        <input type="hidden" name="fname" value="{{ .fname }}">
+                        <button>다운로드</button>
+                    </form>
+                </td>
+                {{ if eq $.user "T" }}
+                <td>
+                    <form method="post" action="/delete">
+                        <input type="hidden" name="fname" value="{{ .fname }}">
+                        <button>삭제</button>
+                    </form>
+                </td>
+                {{ end }}
+            </tr>
+            {{ end }}
+        </table>
+        <br>
+            <button type="button" onclick="window.location.href='/logout'">로그아웃</button>
+        {{ if eq .user "T" }}
+        <button type="button" onclick="window.location.href='/teacher'">게시물 작성하기</button>
+        <button type="button" onclick="window.location.href='/getDB'">백업하기</button>
+        {{ end }}
+    </form>
 </body>
 
 </html>

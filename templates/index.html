@@ -12,7 +12,7 @@
 
 <body>
     <h2>로그인</h2>
-    <form action="/login" method="post">
+    <form class="form" action="/login" method="post">
         <!-- 에러 메시지 출력 -->
         {{ if .msg }}
         <p style="color: {{ .color }};">{{ .msg }}</p>

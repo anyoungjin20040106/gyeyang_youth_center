@@ -23,25 +23,39 @@ h2 {
     text-shadow: 0 0 10px rgba(157, 78, 221, 0.8);
 }
 
-form {
+/* form.form에만 적용되는 스타일 */
+form.form {
     background-color: #222;
-    padding: 20px;
+    padding: 10px; /* 내부 여백을 늘려 더 넉넉한 공간 제공 */
     border: 1px solid #444;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 20px;
+    width: 90%; /* 전체 화면의 90%까지 확장 */
+    max-width: 600px; /* 최대 너비를 600px로 증가 */
+    margin: 20px auto; /* 중앙 정렬 및 위아래 간격 추가 */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 내부 버튼 및 테이블을 중앙 정렬 */
 }
 
-form label {
+form.form table {
+    width: 100%; /* 테이블 너비를 form 내부에 꽉 채움 */
+    margin-bottom: 20px; /* 테이블 아래 여백 추가 */
+}
+
+form.form button {
+    width: 100%; /* 버튼 너비를 form 너비에 맞춤 */
+    margin-bottom: 10px; /* 버튼 간 간격 추가 */
+    padding: 12px; /* 버튼 크기 증가 */
+}
+form.form label {
     font-weight: bold;
     color: #9d4edd;
 }
 
-form input[type="text"],
-form input[type="password"],
-form input[type="file"] {
+form.form input[type="text"],
+form.form input[type="password"],
+form.form input[type="file"] {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
@@ -53,14 +67,14 @@ form input[type="file"] {
     transition: border-color 0.3s ease;
 }
 
-form input[type="text"]:focus,
-form input[type="password"]:focus,
-form input[type="file"]:focus {
+form.form input[type="text"]:focus,
+form.form input[type="password"]:focus,
+form.form input[type="file"]:focus {
     border-color: #9d4edd;
     outline: none;
 }
 
-form button {
+form.form button {
     background-color: #9d4edd;
     color: #e0e0e0;
     border: none;
@@ -71,11 +85,45 @@ form button {
     transition: background-color 0.3s ease;
 }
 
-form button:hover {
+form.form button:hover {
     background-color: #6d29b1;
 }
 
-/* 테이블 스타일 */
+/* 사용자 정의 파일 선택 버튼 */
+form.form .file-upload-label {
+    display: inline-block;
+    background-color: #9d4edd; /* 보라색 배경 */
+    color: #e0e0e0; /* 밝은 회색 텍스트 */
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    text-align: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 10px;
+    border: 1px solid #6d29b1;
+    box-shadow: 0 4px 10px rgba(157, 78, 221, 0.4);
+}
+
+form.form .file-upload-label:hover {
+    background-color: #6d29b1; /* 호버 시 진한 보라색 */
+    box-shadow: 0 4px 12px rgba(157, 78, 221, 0.6);
+}
+
+form.form .file-upload-label:active {
+    background-color: #4b0082; /* 클릭 시 어두운 보라색 */
+    box-shadow: 0 2px 5px rgba(157, 78, 221, 0.5);
+}
+
+/* 기본 form 태그에 스타일 제거 */
+form {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    width: auto;
+    margin-bottom: 0;
+}
 table {
     width: 80%;
     border-collapse: collapse;
@@ -102,82 +150,18 @@ td {
     color: #e0e0e0;
 }
 
-a {
-    color: #9d4edd;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-a:hover {
-    color: #6d29b1;
-}
-
-/* 버튼 스타일 */
-button {
+td a, td button {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 4px;
     background-color: #9d4edd;
     color: #e0e0e0;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #6d29b1;
-}
-
-/* 에러 메시지 */
-p[style*="color: red"] {
-    color: #ff4c4c;
-    font-weight: bold;
-    margin-top: 10px;
-}
-/* 기존 스타일 유지 */
-
-
-/* 사용자 정의 파일 선택 버튼 */
-label {
-    display: inline-block;
-    color: #9d4edd;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
+    text-decoration: none;
     text-align: center;
     transition: background-color 0.3s ease;
-    margin-top: 10px;
 }
 
-form .file-upload-label:hover {
+td a:hover, td button:hover {
     background-color: #6d29b1;
 }
-/* 파일 선택 버튼 스타일 */
-form .file-upload-label {
-    display: inline-block;
-    background-color: #9d4edd; /* 보라색 배경 */
-    color: #e0e0e0; /* 밝은 회색 텍스트 */
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    text-align: center;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    margin-top: 10px;
-    border: 1px solid #6d29b1;
-    box-shadow: 0 4px 10px rgba(157, 78, 221, 0.4);
-}
-
-form .file-upload-label:hover {
-    background-color: #6d29b1; /* 호버 시 진한 보라색 */
-    box-shadow: 0 4px 12px rgba(157, 78, 221, 0.6);
-}
-
-form .file-upload-label:active {
-    background-color: #4b0082; /* 클릭 시 어두운 보라색 */
-    box-shadow: 0 2px 5px rgba(157, 78, 221, 0.5);
-}
-

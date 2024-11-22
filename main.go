@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -94,47 +93,80 @@ func main() {
 		}
 	})
 
-	// PPT 페이지 접근 핸들러
 	r.Any("/ppt", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
 		user := session.Get("user")
 		session.Delete("failMsg")
+
 		// 사용자 로그인 여부 확인
-		if user == "T" || user == "S" {
-			rows, err := db.Query("SELECT * FROM PPT")
-			if err != nil {
-				session.Set("msg", "DB 오류.")
+		if user == nil || (user != "T" && user != "S") {
+			session.Set("msg", "로그인이 필요합니다.")
+			session.Set("color", "red")
+			session.Save()
+			ctx.Redirect(http.StatusSeeOther, "/")
+			return
+		}
+
+		rows, err := db.Query("SELECT * FROM PPT order by upload desc")
+		if err != nil {
+			session.Set("msg", "DB 오류.")
+			session.Set("color", "red")
+			session.Save()
+			ctx.Redirect(http.StatusSeeOther, "/")
+			return
+		}
+		defer rows.Close()
+
+		// 테이블 데이터 생성
+		rowsData := []map[string]string{}
+		for rows.Next() {
+			var title, upload, fname string
+			if err := rows.Scan(&title, &upload, &fname); err != nil {
+				session.Set("msg", "DB 데이터 읽기 오류.")
 				session.Set("color", "red")
 				session.Save()
 				ctx.Redirect(http.StatusSeeOther, "/")
 				return
 			}
-			defer rows.Close()
-			table := "<tr><th>제목</th><th>업로드 날짜</th><th>다운로드</th>"
-			if user == "T" {
-				table += "<th>삭제하기</th>"
+
+			tdata := upload
+			if strings.Contains(upload, "T") {
+				tdata = strings.Split(upload, "T")[0]
 			}
-			table += "</tr>"
-			for rows.Next() {
-				var title string
-				var upload string
-				var fname string
-				rows.Scan(&title, &upload, &fname)
-				tdata := strings.Split(upload, "T")[0]
-				table += fmt.Sprintf("<tr><td>%s</td><td>%s</td><td><a href='download?fname=%s'>다운로드</a></td>", title, tdata, fname)
-				if user == "T" {
-					table += fmt.Sprintf("<td><a href='delete?fname=%s'>삭제하기</a></td>", fname)
-				}
-				table += "<tr>"
+
+			row := map[string]string{
+				"title":  title,
+				"upload": tdata,
+				"fname":  fname,
 			}
-			ctx.HTML(http.StatusOK, "ppt.html", gin.H{"user": user, "table": template.HTML(table)})
+			rowsData = append(rowsData, row)
+		}
+
+		// HTML 렌더링
+		ctx.HTML(http.StatusOK, "ppt.html", gin.H{
+			"user": user,
+			"rows": rowsData,
+		})
+	})
+
+	r.POST("/updateform", func(ctx *gin.Context) {
+		session := sessions.Default(ctx)
+		user := session.Get("user")
+		// 사용자 로그인 여부 확인
+		if user == "T" {
+			fname := ctx.Request.FormValue("fname")
+			session.Delete("msg")
+			session.Save()
+			ctx.HTML(http.StatusAccepted, "update.html", gin.H{
+				"prev": fname,
+			})
 		} else {
-			// 로그인하지 않은 경우 메인 페이지로 리다이렉트
-			session.Set("msg", "암호를 입력해주세요.")
+			session.Set("msg", "선생님만 들어갈수 있습니다.")
 			session.Set("color", "red")
 			session.Save()
 			ctx.Redirect(http.StatusSeeOther, "/")
 		}
+
 	})
 	r.Any("/getDB", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
@@ -161,7 +193,7 @@ func main() {
 	r.Any("/download", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
 		user := session.Get("user")
-		fname := ctx.Query("fname")
+		fname := ctx.Request.FormValue("fname")
 
 		// 사용자 로그인 여부 확인
 		if user == "T" || user == "S" {
@@ -180,7 +212,7 @@ func main() {
 		fmt.Println(user)
 		// 사용자 로그인 여부 확인
 		if user == "T" || user == "S" {
-			fname := ctx.Query("fname")
+			fname := ctx.Request.FormValue("fname")
 
 			if err := os.Remove(filepath.Join("ppt", fname)); err != nil {
 				fmt.Println("삭제 에러")
@@ -200,18 +232,10 @@ func main() {
 	r.Any("/teacher", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
 		user := session.Get("user")
-
+		fmt.Println("당신의 역할 : %s", user)
 		// 사용자 로그인 여부 확인
 		if user == "T" {
 			data := gin.H{}
-			session := sessions.Default(ctx)
-			failMsg := session.Get("failMsg")
-			if failMsg != nil {
-				data["failMsg"] = failMsg
-				session.Delete("failMsg")
-				session.Save()
-			}
-
 			ctx.HTML(http.StatusOK, "upload.html", data)
 		} else {
 			session.Set("msg", "선생님만 들어갈수 있습니다.")
@@ -268,5 +292,5 @@ func main() {
 		ctx.Redirect(303, "/")
 	})
 
-	r.Run(":1234")
+	r.Run(":1324")
 }

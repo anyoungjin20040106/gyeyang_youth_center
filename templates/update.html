@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/asset/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수정하기</title>
+</head>
+<body>
+    <body>
+        <form class="form" action="/update" method="post" enctype="multipart/form-data">
+            <input name="prev" type="hidden" value="{{.fname}}">
+            <label >파일 선택</label>
+            <input id="file-upload" name="next" type="file" required><br>
+    
+            <button type="submit">수정하기</button>
+        </form>
+        <button type="button" onclick="window.location.href='/ppt'">뒤로 가기</button>
+
+</body>
+</html>
